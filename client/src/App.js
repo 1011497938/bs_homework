@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import './css/App.css';
+// import './css/App.css';
+// import './css/WordCard.css';
+// import $ from 'jquery';
+import WordCard from './WordCard'
 
 class App extends Component {
   state = {users: []}
@@ -11,13 +14,14 @@ class App extends Component {
   }
 
   render() {
+        //     <h1>Users</h1>
+        // {this.state.users.map(user =>
+        //   <div key={user.id}>{user.username}</div>
+        // )}
     return (
-      <div className="App">
-        <h1>Users</h1>
-        {this.state.users.map(user =>
-          <div key={user.id}>{user.username}</div>
-        )}
-      </div>
+      <main>
+        <WordCard />
+      </main>
     );
   }
 }
