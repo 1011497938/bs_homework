@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import "./css/Nav.css";
-
+import { Button } from 'semantic-ui-react'
 import VocabularyList from './VocabularyList'
+import NavBlock from './NavBlock'
 class Nav extends Component {
   state = {}
 
@@ -45,7 +46,9 @@ class Nav extends Component {
   render() {
     return (
       <div className="mui-mbar-tabs">
-          <VocabularyList/>
+          <div  className="nav-block">
+            <NavBlock/>
+          </div>    
           <div className="quick_link_mian">
               <div className="quick_links_panel">
                   <div id="quick_links" className="quick_links">
@@ -59,8 +62,12 @@ class Nav extends Component {
                                   </ul>
                               </div>
                               <div className="login_btnbox">
-                                <a href="#none" className="login_order">退出</a>
-                                <a href="#none" className="login_favorite">登录</a>
+                                <Button basic color='grey'>
+                                  退出
+                                </Button>
+                                <Button basic color='grey'>
+                                  登录
+                                </Button>
                               </div>
                               <i className="icon_arrow_white"></i>
                           </div>
