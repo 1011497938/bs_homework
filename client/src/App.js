@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // import './css/WordCard.css';
 // import $ from 'jquery';
 import WordCard from './WordCard'
+import Nav from './Nav'
 
 class App extends Component {
   state = {users: []}
@@ -14,13 +15,10 @@ class App extends Component {
   }
 
   render() {
-        //     <h1>Users</h1>
-        // {this.state.users.map(user =>
-        //   <div key={user.id}>{user.username}</div>
-        // )}
     return (
       <main>
         <WordCard />
+        <Nav />
       </main>
     );
   }
