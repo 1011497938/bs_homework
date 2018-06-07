@@ -16,7 +16,7 @@ class App extends Component {
 
   render() {
     return (
-      <main>
+      <main style={{"backgroundColor": "#23272b"}}>
         <WordCard />
         <Nav />
       </main>

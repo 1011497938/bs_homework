@@ -17,6 +17,16 @@ class WordCard extends Component {
   }
 
   render() {
+
+    var img = (
+          <div>
+            <img src="http://localhost:3001/images/a1.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a2.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a3.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a4.jpg" alt=""/>          
+          </div>
+
+    )
     return (
       <div id="slider">
           <div className="slider-inner">
@@ -35,10 +45,10 @@ class WordCard extends Component {
                   <span data-slide-status="3">Least Concern</span>
               </div>
           </div>
-          <img src="http://localhost:3001/images/a1.jpg" alt=""/>
-          <img src="http://localhost:3001/images/a2.jpg" alt=""/>
-          <img src="http://localhost:3001/images/a3.jpg" alt=""/>
-          <img src="http://localhost:3001/images/a4.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a1.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a2.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a3.jpg" alt=""/>
+            <img src="http://localhost:3001/images/a4.jpg" alt=""/>     
           <div id="pagination">
               <button className="active" data-slide="0"></button>
               <button data-slide="1"></button>
