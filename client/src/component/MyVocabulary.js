@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Button, Icon,Menu,Table, Divider, Segment, Grid, Image, Card} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
+import MyStateStore from '../store'
 
 class MyVocabulary extends Component {
   
@@ -19,6 +20,8 @@ class MyVocabulary extends Component {
   }
 
   render() {
+    var showing
+
     return (
       <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white"}}>
         <WordTable/>
@@ -186,8 +189,6 @@ class WordTable extends Component {
   }
 
 }
-
-
 
 
 export default MyVocabulary;
