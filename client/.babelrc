@@ -1,13 +1,7 @@
-// react
-{
-  "presets": ["react-native-stage-0/decorator-support"]
-}
 
-// 非react
 {
   "presets": [
-    "es2015",
-    "stage-1"
+	"es2015", "react"，"stage-1"
   ],
   "plugins": ["transform-decorators-legacy"]
 }
