@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 // import $ from 'jquery';
 
-import { Button, Icon,Menu,Table, Divider, Segment, Grid, Image, Card} from 'semantic-ui-react'
+import { Button, Icon,Menu,Table, Divider, Segment, Grid, Image, Card, Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
-import MyStateStore from '../store'
+import { observer } from 'mobx-react';
 
+import myStateStore from '../store'
+
+
+@observer
 class MyVocabulary extends Component {
   
   constructor(props){
@@ -20,11 +24,10 @@ class MyVocabulary extends Component {
   }
 
   render() {
-    var showing
-
+    var showing = () => myStateStore.selectedV.name==""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name}/>
     return (
-      <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white"}}>
-        <WordTable/>
+      <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white", "overflow":"scroll"}}>
+        {showing()}
       </div>
     );
   }
@@ -63,6 +66,7 @@ class VocabularyList extends Component {
   }
 }
 
+
 class VocabularyBlock extends Component {
   constructor(props){
     super(props)
@@ -71,7 +75,8 @@ class VocabularyBlock extends Component {
   }
 
   enter = (e)=>{
-    console.log(this.props.name)
+    // console.log(this.props.name)
+    myStateStore.setSelectedV(this.props.name)
   }
 
   delete = (e)=>{
@@ -112,9 +117,19 @@ class WordTable extends Component {
     }
   }
 
+  exit(){
+    myStateStore.setSelectedV("")
+  }
   render() {
     return (
       <Segment padded>
+        <Header size='huge'>{this.props.name}</Header>
+        <Button.Group widths='2'>
+          <Button >开始背诵</Button>
+          <Button color='grey' onClick={this.exit}>退出</Button>
+        </Button.Group>
+        <Divider />
+
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -127,34 +142,10 @@ class WordTable extends Component {
 
           <Table.Body>
             <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>
-                <Button.Group>
-                  <Button>del</Button>
-                  <Button.Or />
-                  <Button color='grey'>add</Button>
-                </Button.Group>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>
-                <Button.Group>
-                  <Button>del</Button>
-                  <Button.Or />
-                  <Button color='grey'>add</Button>
-                </Button.Group>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>Cell</Table.Cell>
-              <Table.Cell>
+              <Table.Cell textAlign='center'>Cell</Table.Cell>
+              <Table.Cell  textAlign='center'>Cell</Table.Cell>
+              <Table.Cell  textAlign='center'>Cell</Table.Cell>
+              <Table.Cell  textAlign='center'>
                 <Button.Group>
                   <Button>del</Button>
                   <Button.Or />
@@ -163,26 +154,6 @@ class WordTable extends Component {
               </Table.Cell>
             </Table.Row>
           </Table.Body>
-
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan='3'>
-                <Menu floated='right' pagination>
-                  <Menu.Item as='a' icon>
-                    <Icon name='chevron left' />
-                  </Menu.Item>
-                  <Menu.Item as='a'>1</Menu.Item>
-                  <Menu.Item as='a'>2</Menu.Item>
-                  <Menu.Item as='a'>3</Menu.Item>
-                  <Menu.Item as='a'>4</Menu.Item>
-                  <Menu.Item as='a' icon>
-                    <Icon name='chevron right' />
-                  </Menu.Item>
-                </Menu>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-
         </Table>
       </Segment>
     );

@@ -1,7 +1,7 @@
 // 这里管理的是状态
-import {observable, action, useStrict} from 'mobx';
-useStrict(true);
+import {observable, action, enforceActions,  boolean, configure} from 'mobx';
 
+configure({ enforceActions: boolean })
 class Word {
 	value = ""
 	prounce = ""
