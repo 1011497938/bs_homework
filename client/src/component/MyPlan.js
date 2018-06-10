@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 // import $ from 'jquery';
 
-import { Button, Icon,Menu,Table, Divider, Segment, Container, Header, Grid, Image, Card, Label, Form, Dropdown, Rating,  List  } from 'semantic-ui-react'
+import { Button, Divider, Segment, Container, Header, Form, Dropdown, Rating,  List  } from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import './css/NavBlock.css'
 
-class NavBlock extends Component {
+class MyPlan extends Component {
   
   constructor(props){
     super(props)
@@ -15,7 +15,7 @@ class NavBlock extends Component {
   }
 
   componentDidMount() {
-
+  	console.log("new")
   }
 
   render() {
@@ -105,4 +105,4 @@ class NavBlock extends Component {
   }
 }
 
-export default NavBlock;
+export default MyPlan;

@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import "./css/Nav.css";
-import { Button } from 'semantic-ui-react'
-import VocabularyList from './VocabularyList'
-import NavBlock from './NavBlock'
+import MyVocabulary from './MyVocabulary'
+import StatusLogin from './StatusLogin'
+import MyPlan from './MyPlan'
+
+
 class Nav extends Component {
-  state = {}
+
+  constructor(props){
+    super(props)
+    this.state = {
+      chooseBox : ""
+    }
+  }
 
   componentDidMount() {
 
-    //显示提示
+    // 显示登录框
     var login_box = true;
     $(".my_qlinks").on("click", function(event){  
       
@@ -22,6 +30,8 @@ class Nav extends Component {
       login_box = !login_box;
     })
 
+
+    //显示提示
     $(".quick_links_panel li").mouseenter(function() {
         $(this).children(".mp_tooltip").animate({ left: -92, queue: true });
         $(this).children(".mp_tooltip").css("visibility", "visible");
@@ -41,37 +51,50 @@ class Nav extends Component {
     $(".quick_toggle li").mouseleave(function() {
         $(this).children(".mp_qrcode").hide();
     });
+
+    // 点击展开
+    var thisDom = this;
+    $("#vocabulary_list").on('click', function(event) {
+      event.preventDefault();
+      if (thisDom.state.chooseBox!=="vocabulary_list")
+        thisDom.setState({chooseBox:"vocabulary_list"})
+      else
+        thisDom.setState({chooseBox:""})
+    });
+
+    $("#my_plain").on('click', function(event) {
+      event.preventDefault();
+      if (thisDom.state.chooseBox!=="my_plain")
+        thisDom.setState({chooseBox:"my_plain"})
+      else
+        thisDom.setState({chooseBox:""})
+    });
+
+  }
+
+  componentDidUpdate(){
+
   }
 
   render() {
+    
+    var showNavBlock = ()=>{
+      switch (this.state.chooseBox){
+        case "vocabulary_list": return <MyVocabulary/>;
+        case "my_plain": return <MyPlan/>;
+      }
+    }
+
     return (
       <div className="mui-mbar-tabs">
           <div  className="nav-block">
-            <NavBlock/>
+            {showNavBlock()}
           </div>    
           <div className="quick_link_mian">
               <div className="quick_links_panel">
                   <div id="quick_links" className="quick_links">
-                      <li><a href="#none" className="my_qlinks"><i className="setting"></i></a>
-                          <div className="ibar_login_box status_login">
-                              <div className="avatar_box">
-                                  <p className="avatar_imgbox"><img src="http://localhost:3001/images/no-img_mid_.jpg" /></p>
-                                  <ul className="user_info">
-                                      <li>用户名：</li>
-                                      <li style={{"marginTop": "10px"}}>sl19931003</li>
-                                  </ul>
-                              </div>
-                              <div className="login_btnbox">
-                                <Button basic color='grey'>
-                                  退出
-                                </Button>
-                                <Button basic color='grey'>
-                                  登录
-                                </Button>
-                              </div>
-                              <i className="icon_arrow_white"></i>
-                          </div>
-                      </li>
+
+                      <StatusLogin />
 
                       <li id="vocabulary_list">
                         <a href="#none" className="message_list">

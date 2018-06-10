@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import './css/index.css';
-import './css/WordCard.css';
-import App from './App';
+import './component/css/WordCard.css';
+import App from './component/App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// MobX
+
+
+ReactDOM.render(
+	<App />,
+	document.getElementById('root')
+);
+
 registerServiceWorker();
