@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 // import $ from 'jquery';
 
-import { Button, Icon,Menu,Table, Divider, Segment, Grid, Image, Card, Header} from 'semantic-ui-react'
+import { Button, Table, Divider, Segment, Grid, Image, Card, Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
 import { observer } from 'mobx-react';
 
 import myStateStore from '../store'
-
+import 'whatwg-fetch'
 
 @observer
 class MyVocabulary extends Component {
@@ -19,12 +19,8 @@ class MyVocabulary extends Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
-    var showing = () => myStateStore.selectedV.name==""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name}/>
+    var showing = () => myStateStore.selectedV.name===""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name}/>
     return (
       <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white", "overflow":"scroll"}}>
         {showing()}
@@ -39,27 +35,70 @@ class VocabularyList extends Component {
   constructor(props){
     super(props)
     this.state = {
-      "vocabularyName" : []
+      "vocabularyList" : []
     }
   }
 
-  componentDidMount() {
-
+  componentDidMount(){
+      //找到用户所有的生词本  
+      var thisNode = this
+      fetch('/vocabularyList?owner='+'all',{  
+          method: 'GET',  
+      })  
+      // .then((response) => response.json())  
+      .then((res) => {  
+          if(res.ok){
+              res.text().then((data)=>{
+                  // console.log(data);
+                  var json = JSON.parse(data); 
+                  var vocabularyList = []
+                  for(let index in json){
+                    vocabularyList.push(json[index]['list'])
+                  }
+                  thisNode.setState({"vocabularyList":vocabularyList})
+              })
+          }
+      })  
+      .catch((error) => {  
+          alert(error)  
+      })  
   }
 
   render() {
+    var renderVocabularyBlock = () => {
+      var vocabularyList= this.state.vocabularyList
+      var vocabularyBlockList = []
+      for (var i = 0; i < vocabularyList.length; i+=2) {
+        if (i+1<vocabularyList.length) {
+          vocabularyBlockList.push(
+            <Grid.Row key={i}>
+              <Grid.Column>
+                <VocabularyBlock name={vocabularyList[i]}/>
+              </Grid.Column>
+              <Grid.Column>
+                <VocabularyBlock name={vocabularyList[i+1]}/>
+              </Grid.Column>
+            </Grid.Row>
+          )
+        }else{
+          vocabularyBlockList.push(
+            <Grid.Row key={i}>
+              <Grid.Column>
+                <VocabularyBlock name={vocabularyList[i]}/>
+              </Grid.Column>
+            </Grid.Row>
+          )      
+        }
+      }
+      return vocabularyBlockList;
+    }
+
+
     return (
       <Segment padded>
         <Divider horizontal>常用单词本</Divider>
         <Grid columns={2} divided>
-          <Grid.Row>
-            <Grid.Column>
-              <VocabularyBlock name="四级"/>
-            </Grid.Column>
-            <Grid.Column>
-              <VocabularyBlock name="六级"/>
-            </Grid.Column>
-          </Grid.Row>
+          {renderVocabularyBlock()}
         </Grid>
       </Segment>
     );
@@ -74,13 +113,27 @@ class VocabularyBlock extends Component {
     }
   }
 
+  get(url) {  
+    // var result = fetch('http://www.mockhttp.cn'+url, { //打包apk时候使用  
+    var result = fetch(''+url, {  
+        credentails: 'include',  
+        mode: "cors",  
+        headers: {  
+            'Accept': 'application/json, text/plain, */*',  
+            'Content-Type': 'application/x-www-form-urlencoded'  
+        }  
+    });  
+    return result;  
+  }  
+
+
   enter = (e)=>{
     // console.log(this.props.name)
     myStateStore.setSelectedV(this.props.name)
   }
 
   delete = (e)=>{
-    console.log(this.props.name)
+    // console.log(this.props.name)
   }
 
   render() {
@@ -114,13 +167,70 @@ class WordTable extends Component {
   constructor(props){
     super(props)
     this.state = {
+      words:[]
     }
   }
 
   exit(){
     myStateStore.setSelectedV("")
   }
+
+
+  componentDidMount(){
+      //找到生词本所有单词
+      var thisNode = this
+      fetch('/vocabulary?listName='+this.props.name,{  
+          method: 'GET',  
+      })  
+      // .then((response) => response.json())  
+      .then((res) => {  
+          if(res.ok){
+              res.text().then((data)=>{
+                  var json = JSON.parse(data); 
+                  thisNode.setState({words:json})
+                  myStateStore.setShowWordData(json)
+              })
+          }
+      })  
+      .catch((error) => {  
+          alert(error)  
+      })  
+  }
+
   render() {
+    var renderTable = ()=>{
+      // console.log(this.state.words)
+      var row = (word,index) => (
+        <Table.Row key={word.word+"_"+index}>
+          <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
+          <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
+          <Table.Cell  textAlign='left'>
+            <Button.Group>
+              <Button className={word.word + '_' + word.list + '_del'}>del</Button>
+              <Button.Or />
+              <Button color='grey' className={word.word + '_' + word.list + '_add'}>addTo</Button>
+            </Button.Group>
+          </Table.Cell>
+        </Table.Row>
+      )
+      // return  this.state.words.map(function(index, elem) {
+      //           return row(elem);
+      //         })
+      var table = [];
+      var length = 0;
+      if (this.state.words.length>=10) 
+        length = 10
+      else
+        length = this.state.words.length
+
+      for (var i = 0; i < length; i++) {
+        table.push(row(this.state.words[i],i))
+        // console.log(this.state.words[i])
+        // return row(this.state.words[i],i)
+      }
+      return table;
+    }
+
     return (
       <Segment padded>
         <Header size='huge'>{this.props.name}</Header>
@@ -130,31 +240,21 @@ class WordTable extends Component {
         </Button.Group>
         <Divider />
 
-        <Table celled>
+        <Table celled padded>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>单词</Table.HeaderCell>
-              <Table.HeaderCell>发音</Table.HeaderCell>
+              {/*<Table.HeaderCell>发音</Table.HeaderCell>*/}
               <Table.HeaderCell>意思</Table.HeaderCell>
               <Table.HeaderCell>操作</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell textAlign='center'>Cell</Table.Cell>
-              <Table.Cell  textAlign='center'>Cell</Table.Cell>
-              <Table.Cell  textAlign='center'>Cell</Table.Cell>
-              <Table.Cell  textAlign='center'>
-                <Button.Group>
-                  <Button>del</Button>
-                  <Button.Or />
-                  <Button color='grey'>add</Button>
-                </Button.Group>
-              </Table.Cell>
-            </Table.Row>
+            {renderTable()}
           </Table.Body>
         </Table>
+
       </Segment>
     );
   }

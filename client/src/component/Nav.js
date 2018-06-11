@@ -82,6 +82,7 @@ class Nav extends Component {
       switch (this.state.chooseBox){
         case "vocabulary_list": return <MyVocabulary/>;
         case "my_plain": return <MyPlan/>;
+        default : return <div/>
       }
     }
 
@@ -122,7 +123,7 @@ class Nav extends Component {
                           <i className="mpbtn_qrcode"></i>
                         </a>
                           <div className="mp_qrcode" style={{"display":"none"}}>
-                            <img src="http://localhost:3001/images/weixin_code_145.png" width="148" height="175" />
+                            <img src="http://localhost:3001/images/weixin_code_145.png" width="148" height="175" alt=""/>
                             <i className="icon_arrow_white"></i>
                           </div>
                       </li>

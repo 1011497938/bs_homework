@@ -1,15 +1,10 @@
 // 这里管理的是状态
-import {observable, action, enforceActions,  boolean, configure} from 'mobx';
+import {observable, action, boolean, configure} from 'mobx';
 
 configure({ enforceActions: boolean })
-class Word {
-	value = ""
-	prounce = ""
-	meaning = ""
-}
 
 class MyStateStore {
-  // 被观察者
+  // 选中的单词本
   @observable selectedV = {
     name: "",
     word: []
@@ -18,6 +13,30 @@ class MyStateStore {
   @action setSelectedV = (vName)=> {
   	this.selectedV.name = vName;
   }
+
+
+  // 单词本中的单词
+  @observable wordData = {}
+
+  // 显示在大屏幕的单词
+  @observable showWordData = []
+  @action setShowWordData = (data)=> {
+  	console.log("set")
+  	this.showWordData = Object.assign(data);
+  }
+
+  @observable loginStatus = {
+  	"name":""
+  }
+
+  //计划
+  @observable plan = {
+  	// "startTime":"", //开始时间
+	"selectedVocabulary":"", //选择单词本
+	"days":"",   //限制时间
+	"completion":""  //完成度
+  }
+
 }
 
 
