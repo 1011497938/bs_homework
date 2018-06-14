@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import $ from 'jquery';
 
-import { Button, Table, Divider, Segment, Grid, Image, Card, Header} from 'semantic-ui-react'
+import { Button, Table, Divider, Segment, Grid, Image, Card, Header,Modal,Form} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
 import { observer } from 'mobx-react';
@@ -39,10 +39,11 @@ class VocabularyList extends Component {
     }
   }
 
-  componentDidMount(){
-      //找到用户所有的生词本  
-      var thisNode = this
-      fetch('/vocabularyList?owner='+'all',{  
+  update(){
+    //找到用户所有的生词本  
+    var thisNode = this
+    if(myStateStore.loginStatus.name!=='')
+      fetch('/vocabularyList?owner='+myStateStore.loginStatus.name,{  
           method: 'GET',  
       })  
       // .then((response) => response.json())  
@@ -63,6 +64,9 @@ class VocabularyList extends Component {
           console.log(error) 
       })  
   }
+  componentDidMount(){
+    this.update()
+  }
 
   render() {
     var renderVocabularyBlock = () => {
@@ -73,10 +77,10 @@ class VocabularyList extends Component {
           vocabularyBlockList.push(
             <Grid.Row key={i}>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]}/>
+                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
               </Grid.Column>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i+1]}/>
+                <VocabularyBlock name={vocabularyList[i+1]} update={this.update.bind(this)}/>
               </Grid.Column>
             </Grid.Row>
           )
@@ -84,7 +88,7 @@ class VocabularyList extends Component {
           vocabularyBlockList.push(
             <Grid.Row key={i}>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]}/>
+                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
               </Grid.Column>
             </Grid.Row>
           )      
@@ -93,10 +97,10 @@ class VocabularyList extends Component {
       return vocabularyBlockList;
     }
 
-
     return (
       <Segment padded>
-        <Divider horizontal>常用单词本</Divider>
+        <AddV update={this.update.bind(this)}/>
+        <Divider horizontal>单词本</Divider>
         <Grid columns={2} divided>
           {renderVocabularyBlock()}
         </Grid>
@@ -105,6 +109,47 @@ class VocabularyList extends Component {
   }
 }
 
+// 添加生词本
+class AddV  extends Component{
+  render(){
+    var submit = () => {
+        if (this.refs.name.value!==''&&myStateStore.loginStatus.name!=='') {
+          fetch('/vocabularyList/add?owner='+myStateStore.loginStatus.name+"&name="+this.refs.name.value,{  
+              method: 'GET',  
+          })  
+          // .then((response) => response.json())  
+          .then((res) => {  
+              if(res.ok){
+                  res.text().then((data)=>{
+                    if (data=="success") {
+                      alert("添加成功")
+                      this.props.update();
+                    }else
+                      alert("添加失败")
+                  })
+              }
+          })  
+          .catch((error) => {  
+              console.log(error) 
+          }) 
+        }
+    }
+    return (
+      <Modal trigger={<Button>添加生词本</Button>}>
+        <Modal.Header>登陆</Modal.Header>
+        <Modal.Content image>
+        <Form>
+          <Form.Field>
+            <label>生词本名</label>
+            <input placeholder='生词本名' ref="name"/>
+          </Form.Field>
+          <Button type='submit' onClick={submit}>登陆</Button>
+        </Form>
+        </Modal.Content>
+      </Modal>
+    )
+  }
+}
 
 class VocabularyBlock extends Component {
   constructor(props){
@@ -113,19 +158,6 @@ class VocabularyBlock extends Component {
     }
   }
 
-  get(url) {  
-    // var result = fetch('http://www.mockhttp.cn'+url, { //打包apk时候使用  
-    var result = fetch(''+url, {  
-        credentails: 'include',  
-        mode: "cors",  
-        headers: {  
-            'Accept': 'application/json, text/plain, */*',  
-            'Content-Type': 'application/x-www-form-urlencoded'  
-        }  
-    });  
-    return result;  
-  }  
-
 
   enter = (e)=>{
     // console.log(this.props.name)
@@ -133,7 +165,26 @@ class VocabularyBlock extends Component {
   }
 
   delete = (e)=>{
-    // console.log(this.props.name)
+    console.log("删除")
+    if (this.props.name!==''&&myStateStore.loginStatus.name!=='') {
+      fetch('/vocabularyList/delete?owner='+myStateStore.loginStatus.name+"&name="+this.props.name,{  
+          method: 'GET',  
+      })  
+      // .then((response) => response.json())  
+      .then((res) => {  
+          if(res.ok){
+              res.text().then((data)=>{
+                if (data=="success") {
+                  this.props.update();
+                }else
+                  alert("删除失败")
+              })
+          }
+      })  
+      .catch((error) => {  
+          console.log(error) 
+      }) 
+    }
   }
 
   render() {
@@ -143,9 +194,9 @@ class VocabularyBlock extends Component {
         <Card.Content>
           <Card.Header>{this.props.name}</Card.Header>
           <Card.Meta>
-            <span className='date'>Joined in 2015</span>
+            {/*<span className='date'>Joined in 2015</span>*/}
           </Card.Meta>
-          <Card.Description>100个单词</Card.Description>
+          {/*<Card.Description>100个单词</Card.Description>*/}
         </Card.Content>
         <Card.Content extra>
           <div className='ui two buttons'>
@@ -213,9 +264,6 @@ class WordTable extends Component {
           </Table.Cell>
         </Table.Row>
       )
-      // return  this.state.words.map(function(index, elem) {
-      //           return row(elem);
-      //         })
       var table = [];
       var length = 0;
       if (this.state.words.length>=10) 
@@ -225,8 +273,6 @@ class WordTable extends Component {
 
       for (var i = 0; i < length; i++) {
         table.push(row(this.state.words[i],i))
-        // console.log(this.state.words[i])
-        // return row(this.state.words[i],i)
       }
       return table;
     }

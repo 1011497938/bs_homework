@@ -21,7 +21,6 @@ class MyStateStore {
   // 显示在大屏幕的单词
   @observable showWordData = []
   @action setShowWordData = (data)=> {
-  	console.log("set")
   	this.showWordData = Object.assign(data);
   }
 
@@ -37,10 +36,18 @@ class MyStateStore {
   //计划
   @observable plan = {
   	// "startTime":"", //开始时间
-	"selectedVocabulary":"", //选择单词本
-	"days":"",   //限制时间
-	"completion":""  //完成度
+  	"V":"四级", //选择单词本
+  	"days":"3",   //限制时间
+  	"completion":"100"  //完成度
   }
+  @action setPlan = (V,days,completion) => {
+    this.plan.V = V
+    this.plan.days = days
+    this.plan.completion = completion
+    if (this.loginStatus.name!=="") {
+      // update
+    }
+  } 
 
 }
 

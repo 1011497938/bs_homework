@@ -13,17 +13,49 @@ var connection = mysql.createConnection({
 connection.connect();
 
 // var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT ?';
-var  sql = 'SELECT DISTINCT list FROM vocabulary WHERE owner = ?';
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	var owner = req.query.owner
-  console.log(owner)
+  // console.log(owner)
+  var  sql = 'SELECT DISTINCT list FROM user_vocabulary WHERE user = ? OR user = "all"';
   connection.query(sql, owner,function (err, result) {
       if(err){
         console.log('[SELECT ERROR] - ',err.message);
         return;
       }
       res.json(result)
+  });
+  // res.send("hello")
+});
+
+
+router.get('/add', function(req, res, next) {
+  var  sql = "INSERT INTO user_vocabulary (user, list) VALUES (?, ?)"
+  var owner = req.query.owner
+  var name = req.query.name
+  // console.log(owner)
+  connection.query(sql, [owner,name],function (err, result) {
+      if(err){
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      res.send("success")
+  });
+  // res.send("hello")
+});
+
+router.get('/delete', function(req, res, next) {
+  var  sql = "DELETE FROM user_vocabulary WHERE user = ? AND list = ?"
+  var owner = req.query.owner
+  var name = req.query.name
+  // console.log(owner)
+  connection.query(sql, [owner,name],function (err, result) {
+      if(err){
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      res.send("success")
   });
   // res.send("hello")
 });
