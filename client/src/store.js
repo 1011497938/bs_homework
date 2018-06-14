@@ -26,8 +26,13 @@ class MyStateStore {
   }
 
   @observable loginStatus = {
-  	"name":""
+  	"name":"",
+  	"email":""
   }
+  @action setLoginStatus = (name, email) => {
+  	this.loginStatus.name = name
+  	this.loginStatus.email = email
+  } 
 
   //计划
   @observable plan = {

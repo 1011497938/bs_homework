@@ -60,7 +60,7 @@ class VocabularyList extends Component {
           }
       })  
       .catch((error) => {  
-          alert(error)  
+          console.log(error) 
       })  
   }
 
@@ -193,7 +193,7 @@ class WordTable extends Component {
           }
       })  
       .catch((error) => {  
-          alert(error)  
+          console.log(error)  
       })  
   }
 
