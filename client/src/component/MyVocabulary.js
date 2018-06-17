@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
-import { Button, Table, Divider, Segment, Grid, Image, Card, Header,Modal,Form, Select} from 'semantic-ui-react'
+import { Button, Table, Divider, Segment, Grid, Image, Card, Header,Modal,Form} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
 import { observer } from 'mobx-react';
@@ -20,7 +20,7 @@ class MyVocabulary extends Component {
   }
 
   render() {
-    var showing = () => myStateStore.selectedV.name===""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name} owner={myStateStore.selectedV.owner}/>
+    var showing = () => myStateStore.selectedV.name===""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name}/>
     return (
       <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white", "overflow":"scroll"}}>
         {showing()}
@@ -35,8 +35,7 @@ class VocabularyList extends Component {
   constructor(props){
     super(props)
     this.state = {
-      "vocabularyList" : [],
-      "userList" : []
+      "vocabularyList" : []
     }
   }
 
@@ -54,15 +53,10 @@ class VocabularyList extends Component {
                   // console.log(data);
                   var json = JSON.parse(data); 
                   var vocabularyList = []
-                  var userList = []
                   for(let index in json){
-                    // console.log(json[index])
                     vocabularyList.push(json[index]['list'])
-                    userList.push(json[index]['user'])
                   }
-                  // console.log(vocabularyList, userList)
                   thisNode.setState({"vocabularyList":vocabularyList})
-                  thisNode.setState({"userList":userList})
               })
           }
       })  
@@ -77,17 +71,16 @@ class VocabularyList extends Component {
   render() {
     var renderVocabularyBlock = () => {
       var vocabularyList= this.state.vocabularyList
-      var userList= this.state.userList
       var vocabularyBlockList = []
       for (var i = 0; i < vocabularyList.length; i+=2) {
         if (i+1<vocabularyList.length) {
           vocabularyBlockList.push(
             <Grid.Row key={i}>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]} owner={userList[i]} update={this.update.bind(this)}/>
+                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
               </Grid.Column>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i+1]} owner={userList[i+1]} update={this.update.bind(this)}/>
+                <VocabularyBlock name={vocabularyList[i+1]} update={this.update.bind(this)}/>
               </Grid.Column>
             </Grid.Row>
           )
@@ -95,7 +88,7 @@ class VocabularyList extends Component {
           vocabularyBlockList.push(
             <Grid.Row key={i}>
               <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]} owner={userList[i]} update={this.update.bind(this)}/>
+                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
               </Grid.Column>
             </Grid.Row>
           )      
@@ -159,7 +152,7 @@ class AddV  extends Component{
   }
 }
 
-@observer
+
 class VocabularyBlock extends Component {
   constructor(props){
     super(props)
@@ -169,11 +162,11 @@ class VocabularyBlock extends Component {
 
 
   enter = (e)=>{
-    myStateStore.setSelectedV(this.props.name, this.props.owner)
+    myStateStore.setSelectedV(this.props.name)
   }
 
   delete = (e)=>{
-    // console.log("删除")
+    console.log("删除")
     if (this.props.name!==''&&myStateStore.loginStatus.name!=='') {
       fetch('/vocabularyList/delete?owner='+myStateStore.loginStatus.name+"&name="+this.props.name,{  
           method: 'GET',  
@@ -207,14 +200,11 @@ class VocabularyBlock extends Component {
         </Card.Content>
         <Card.Content extra>
           <div className='ui two buttons'>
-            {
-              this.props.owner==='all'?(<div/>):
-                <Button basic color='red'  id={this.props.name + "_delete"} onClick={this.delete}>
-                  删除
-                </Button>
-            }
             <Button basic color='green' id={this.props.name + "_enter"} onClick={this.enter}>
               进入
+            </Button>
+            <Button basic color='red'  id={this.props.name + "_delete"} onClick={this.delete}>
+              删除
             </Button>
           </div>
         </Card.Content>
@@ -223,7 +213,6 @@ class VocabularyBlock extends Component {
   }
 }
 
-@observer
 // 添加到单词本
 class AddTo  extends Component{
   constructor(props){
@@ -309,17 +298,12 @@ class WordTable extends Component {
   constructor(props){
     super(props)
     this.state = {
-      words:[],
-      update:false
+      words:[]
     }
   }
 
   exit(){
     myStateStore.setSelectedV("")
-  }
-
-  start(){
-    myStateStore.setShowWordData(this.state.words)
   }
 
 
@@ -335,6 +319,7 @@ class WordTable extends Component {
               res.text().then((data)=>{
                   var json = JSON.parse(data); 
                   thisNode.setState({words:json})
+                  myStateStore.setShowWordData(json)
               })
           }
       })  
@@ -345,63 +330,31 @@ class WordTable extends Component {
 
   render() {
     var renderTable = ()=>{
-      var del = {}
-      for (var i = 0; i < this.state.words.length; i++) {
-        let word = this.state.words[i]
-        del[word.word] = ()=>{
-          // console.log(word.word)
-          // /vocabulary/delete?word=helloWorld&vocabulary=test1&owner=1
-          if(myStateStore.loginStatus.name!=='')
-            fetch('vocabulary/delete?word=' + word.word + '&vocabulary=' + this.props.name + '&owner=' + myStateStore.loginStatus.name,{  
-                method: 'GET',  
-            })  
-            // .then((response) => response.json())  
-            .then((res) => {  
-                if(res.ok){
-                    res.text().then((data)=>{
-                      if (data!=='success') {
-                        alert("删除失败")
-                      }
-                      this.setState({update:!this.state.update})
-                      // console.log(this.state.update)
-                    })
-                }
-            })  
-            .catch((error) => {  
-                console.log(error) 
-            }) 
-        }
-      }
-
+      // console.log(this.state.words)
       var row = (word,index) => (
         <Table.Row key={word.word+"_"+index}>
           <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
           <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
           <Table.Cell  textAlign='left'>
             <Button.Group>
-              <Button onClick={del[word.word]}>del</Button>
+              <Button className={word.word + '_' + word.list + '_del'}>del</Button>
               <Button.Or />
               <AddTo word={word}/>
+              {/*<Button color='grey' className={word.word + '_' + word.list + '_add'}>addTo</Button>*/}
             </Button.Group>
           </Table.Cell>
         </Table.Row>
       )
-      if (this.props.owner==='all')
-        row = (word,index) => (
-          <Table.Row key={word.word+"_"+index}>
-            <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
-            <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
-            <Table.Cell  textAlign='left'>
-              <Button.Group>
-                <AddTo word={word}/>
-              </Button.Group>
-            </Table.Cell>
-          </Table.Row>
-        )
-
       var table = [];
-      for (var i = 0; i < this.state.words.length; i++)
+      var length = 0;
+      if (this.state.words.length>=10) 
+        length = 10
+      else
+        length = this.state.words.length
+
+      for (var i = 0; i < length; i++) {
         table.push(row(this.state.words[i],i))
+      }
       return table;
     }
 
@@ -409,7 +362,7 @@ class WordTable extends Component {
       <Segment padded>
         <Header size='huge'>{this.props.name}</Header>
         <Button.Group widths='2'>
-          <Button onClick={this.start.bind(this)}>开始背诵</Button>
+          <Button >开始背诵</Button>
           <Button color='grey' onClick={this.exit}>退出</Button>
         </Button.Group>
         <Divider />

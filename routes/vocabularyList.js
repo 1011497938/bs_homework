@@ -18,7 +18,7 @@ connection.connect();
 router.get('/', function(req, res, next) {
 	var owner = req.query.owner
   // console.log(owner)
-  var  sql = 'SELECT DISTINCT list, user FROM user_vocabulary WHERE user = ? OR user = "all" ORDER BY user DESC';
+  var  sql = 'SELECT DISTINCT list FROM user_vocabulary WHERE user = ? OR user = "all"';
   connection.query(sql, owner,function (err, result) {
       if(err){
         console.log('[SELECT ERROR] - ',err.message);
