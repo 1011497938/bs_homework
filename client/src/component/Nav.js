@@ -4,14 +4,17 @@ import "./css/Nav.css";
 import MyVocabulary from './MyVocabulary'
 import StatusLogin from './StatusLogin'
 import MyPlan from './MyPlan'
+import myStateStore from '../store'
+import { observer } from 'mobx-react';
 
-
+@observer
 class Nav extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      chooseBox : ""
+      chooseBox : "",
+      listNum : 0
     }
   }
 
@@ -52,32 +55,31 @@ class Nav extends Component {
         $(this).children(".mp_qrcode").hide();
     });
 
-    // 点击展开
-    var thisDom = this;
-    $("#vocabulary_list").on('click', function(event) {
-      event.preventDefault();
-      if (thisDom.state.chooseBox!=="vocabulary_list")
-        thisDom.setState({chooseBox:"vocabulary_list"})
-      else
-        thisDom.setState({chooseBox:""})
-    });
-
-    $("#my_plain").on('click', function(event) {
-      event.preventDefault();
-      if (thisDom.state.chooseBox!=="my_plain")
-        thisDom.setState({chooseBox:"my_plain"})
-      else
-        thisDom.setState({chooseBox:""})
-    });
-
   }
 
-  componentDidUpdate(){
-
-  }
 
   render() {
-    
+    // console.log("nav")
+    //更新单词表个数
+    var thisNode = this
+
+    fetch('/vocabularyList/count/?owner='+myStateStore.loginStatus.name,{  
+        method: 'GET',  
+    })  
+    // .then((response) => response.json())  
+    .then((res) => {  
+        if(res.ok){
+          res.text().then((data)=>{
+            data = JSON.parse(data); 
+            if (thisNode.state.listNum!=data["count"])
+              thisNode.setState({"listNum":data["count"]})
+          })
+        }
+    })  
+    .catch((error) => {  
+        console.log(error) 
+    })  
+
     var showNavBlock = ()=>{
       switch (this.state.chooseBox){
         case "vocabulary_list": return <MyVocabulary/>;
@@ -86,6 +88,20 @@ class Nav extends Component {
       }
     }
 
+    var clickV = (event) =>{
+        event.preventDefault();
+        if (this.state.chooseBox!=="vocabulary_list")
+          this.setState({chooseBox:"vocabulary_list"})
+        else
+          this.setState({chooseBox:""})
+    }
+    var clickP = (event) =>{
+        event.preventDefault();
+        if (this.state.chooseBox!=="my_plain")
+          this.setState({chooseBox:"my_plain"})
+        else
+          this.setState({chooseBox:""})
+    }
     return (
       <div className="mui-mbar-tabs">
           <div  className="nav-block">
@@ -96,20 +112,26 @@ class Nav extends Component {
                   <div id="quick_links" className="quick_links">
 
                       <StatusLogin />
+                      {
+                        myStateStore.loginStatus.name!==""?
+                        (
+                          <div>
+                            <li id="vocabulary_list" onClick={clickV}>
+                              <a href="#none" className="message_list">
+                                <div className="span">单词本</div>
+                                <span className="cart_num">{this.state.listNum}</span>
+                              </a>
+                            </li>
 
-                      <li id="vocabulary_list">
-                        <a href="#none" className="message_list">
-                          <div className="span">单词本</div>
-                          <span className="cart_num">0</span>
-                        </a>
-                      </li>
-
-                      <li id="my_plain">
-                        <a href="#none" className="message_list">
-                          <div className="span">我的计划</div>
-                        </a>
-                      </li>
-
+                            <li id="my_plain" onClick={clickP}>
+                              <a href="#none" className="message_list">
+                                <div className="span">我的计划</div>
+                              </a>
+                            </li>
+                          </div>
+                        ):
+                        <div/>
+                      }
                   </div>
 
                   <div className="quick_toggle">

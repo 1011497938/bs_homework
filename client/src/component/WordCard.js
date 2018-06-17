@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import myStateStore from '../store'
 import { observer } from 'mobx-react';
-// import $ from 'jquery';
 
-// import './js/WordCard/imagesloaded.pkgd.js';
-// import './js/WordCard/index.js';
-// import './js/WordCard/three.min.js';
-// import './js/WordCard/TweenMax.min.js';
+// import $ from 'jquery';
+// import './js/imagesloaded.pkgd.js';
+// import './js/word_card.js';
+// import './js/three.min.js';
+// import './js/TweenMax.min.js';
 
 @observer
 class WordCard extends Component {
-  state = {users: []}
+  state = {}
 
   componentDidMount() {
     // fetch('/users')
@@ -19,6 +19,8 @@ class WordCard extends Component {
   }
 
   render() {
+    var wordData = myStateStore.showWordData
+
     console.log("WordCard")
     var renderCard_slider = () => {
       var showWordData = myStateStore.showWordData

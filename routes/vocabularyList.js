@@ -29,6 +29,20 @@ router.get('/', function(req, res, next) {
   // res.send("hello")
 });
 
+// 单词表个数
+router.get('/count', function(req, res, next) {
+  var owner = req.query.owner
+  // console.log(owner)
+  var  sql = 'SELECT DISTINCT count(*) as count FROM user_vocabulary WHERE user = ? OR user = "all" ORDER BY user DESC';
+  connection.query(sql, owner,function (err, result) {
+      if(err){
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      res.json(result[0])
+  });
+  // res.send("hello")
+});
 
 router.get('/add', function(req, res, next) {
   var  sql = "INSERT INTO user_vocabulary (user, list) VALUES (?, ?)"

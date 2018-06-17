@@ -116,6 +116,7 @@ class VocabularyList extends Component {
   }
 }
 
+@observer
 // 添加生词本
 class AddV  extends Component{
   render(){
@@ -143,14 +144,14 @@ class AddV  extends Component{
     }
     return (
       <Modal trigger={<Button>添加生词本</Button>}>
-        <Modal.Header>登陆</Modal.Header>
+        <Modal.Header>添加</Modal.Header>
         <Modal.Content image>
         <Form>
           <Form.Field>
             <label>生词本名</label>
             <input placeholder='生词本名' ref="name"/>
           </Form.Field>
-          <Button type='submit' onClick={submit}>登陆</Button>
+          <Button type='submit' onClick={submit}>添加</Button>
         </Form>
         </Modal.Content>
       </Modal>
@@ -158,7 +159,7 @@ class AddV  extends Component{
   }
 }
 
-
+@observer
 class VocabularyBlock extends Component {
   constructor(props){
     super(props)
@@ -222,7 +223,7 @@ class VocabularyBlock extends Component {
   }
 }
 
-
+@observer
 // 添加到单词本
 class AddTo  extends Component{
   constructor(props){
@@ -303,6 +304,7 @@ class AddTo  extends Component{
   }
 }
 
+@observer
 class WordTable extends Component {
   constructor(props){
     super(props)

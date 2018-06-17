@@ -15,7 +15,7 @@ connection.connect();
 // var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT ?';
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT 10';
+    var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT 100';
   var listName = req.query.listName
     connection.query(sql, listName,function (err, result) {
         if(err){
@@ -57,6 +57,7 @@ router.get('/addTo', function(req, res, next) {
   });
 });
 
+// http://localhost:3001/vocabulary/delete?word=helloWorld&vocabulary=test1&owner=1
 router.get('/delete', function(req, res, next) {
   var sql = 'DELETE FROM vocabulary WHERE word = ? AND list = ? AND owner = ?';
   var owner = req.query.owner

@@ -14,7 +14,7 @@ class MyStateStore {
   @action setSelectedV = (vName, owner)=> {
   	this.selectedV.name = vName;
     this.selectedV.owner = owner;
-    console.log(owner)
+    // console.log(owner)
   }
 
 

@@ -8,6 +8,7 @@ import './css/NavBlock.css'
 import { observer } from 'mobx-react';
 import myStateStore from '../store'
 import $ from 'jquery';
+
 @observer
 class MyPlan extends Component {
   
@@ -130,9 +131,20 @@ class MyPlan extends Component {
 		.then((res) => {  
 		  if(res.ok){
 		      res.text().then((data)=>{
-		          var json = JSON.parse(data); 
-		          myStateStore.setShowWordData(json)
-		          console.log()
+		        var json = JSON.parse(data);
+						function shuffle(a) {
+						   var len = a.length;
+						   for(var i=0;i<len;i++){
+						       var end = len - 1 ;
+						       var index = (Math.random()*(end + 1)) >> 0;
+						       var t = a[end];
+						       a[end] = a[index];
+						       a[index] = t;
+						   }
+						   return a;
+						};
+	          myStateStore.setShowWordData(shuffle(json))
+	          console.log()
 		      })
 		  }
 		})  
@@ -204,7 +216,11 @@ class MyPlan extends Component {
 							<Header as='h5'>背诵记录：</Header>
 							{renderHistory()}
 						</List>
-					    <Button fluid onClick={startMemorize}>开始今天的计划</Button>
+							<Button.Group vertical fluid >
+						    <Button fluid onClick={startMemorize}>开始今天的计划</Button>
+						    <Button fluid onClick={startMemorize} >复习</Button>
+						    <Button fluid onClick={startMemorize}>考核</Button>
+					    </Button.Group>
 			      	</Segment>
   				):""
   		}
