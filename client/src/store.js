@@ -7,11 +7,14 @@ class MyStateStore {
   // 选中的单词本
   @observable selectedV = {
     name: "",
-    word: []
+    word: [],
+    owner: ""
   };
 
-  @action setSelectedV = (vName)=> {
+  @action setSelectedV = (vName, owner)=> {
   	this.selectedV.name = vName;
+    this.selectedV.owner = owner;
+    console.log(owner)
   }
 
 
