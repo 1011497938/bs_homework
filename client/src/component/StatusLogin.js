@@ -25,7 +25,7 @@ class StatusLogin extends Component {
 				  if (data.login=="success") {
 				  	data = JSON.parse(data.data) 
 				  	myStateStore.setLoginStatus(data.name, data.email)
-				  	console.log(myStateStore.loginStatus.name)
+				  	myStateStore.setPlan(data.selectedVocabulary, data.days, data.completion)
 				  }
 			  })
 		  }
@@ -62,6 +62,7 @@ class StatusLogin extends Component {
 	}
 
 }
+
 
 class Login extends Component {
 	constructor(props){

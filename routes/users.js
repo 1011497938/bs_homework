@@ -68,4 +68,48 @@ router.get('/signUp', function(req, res, next) {
   });
 });
 
+// http://localhost:3001/users/plan?name=1
+router.get('/plan', function(req, res, next) {
+  var  sql = 'SELECT * FROM user WHERE name = ?';
+  var name = req.query.name
+
+  connection.query(sql, name,function (err, result){
+    if(err){
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+    res.send(result[0])
+  });
+});
+
+// http://localhost:3001/users/plan/update?name=hi&vocabulary=%E5%9B%9B%E7%BA%A7&days=10
+router.get('/plan/update', function(req, res, next) {
+  var name = req.query.name
+  var vocabulary = req.query.vocabulary
+  var days = req.query.days
+  var sql = 'UPDATE user SET selectedVocabulary =?,completion=0,days=? WHERE name = ?';
+
+  var name = req.query.name
+
+  connection.query(sql,[vocabulary, days, name],function (err, result){
+    if(err){
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+    res.send('success')
+  });
+});
+
+router.get('/plan/record', function(req, res, next) {
+  var name = req.query.name
+  var sql = 'UPDATE user SET completion=completion+1 WHERE name = ?';
+
+  connection.query(sql,name,function (err, result){
+    if(err){
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+    res.send('success')
+  });
+});
 module.exports = router;

@@ -151,6 +151,10 @@ class AddV  extends Component{
   }
 }
 
+
+class AddV  extends Component{
+  render
+}
 class VocabularyBlock extends Component {
   constructor(props){
     super(props)
@@ -160,7 +164,6 @@ class VocabularyBlock extends Component {
 
 
   enter = (e)=>{
-    // console.log(this.props.name)
     myStateStore.setSelectedV(this.props.name)
   }
 
@@ -170,7 +173,6 @@ class VocabularyBlock extends Component {
       fetch('/vocabularyList/delete?owner='+myStateStore.loginStatus.name+"&name="+this.props.name,{  
           method: 'GET',  
       })  
-      // .then((response) => response.json())  
       .then((res) => {  
           if(res.ok){
               res.text().then((data)=>{

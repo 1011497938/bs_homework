@@ -40,10 +40,12 @@ class MyStateStore {
   	"days":"3",   //限制时间
   	"completion":"100"  //完成度
   }
+
   @action setPlan = (V,days,completion) => {
     this.plan.V = V
     this.plan.days = days
     this.plan.completion = completion
+    console.log(this.plan.V)
     if (this.loginStatus.name!=="") {
       // update
     }

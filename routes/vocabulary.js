@@ -13,33 +13,33 @@ var connection = mysql.createConnection({
 connection.connect();
 
 // var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT ?';
-var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT 10';
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+    var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT 10';
 	var listName = req.query.listName
-	// var limit = parseInt(req.query.limit)
-	// res.send(listName)
     connection.query(sql, listName,function (err, result) {
         if(err){
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-
-        // var data = {}
-        // for (var i = 0; i < result.length; i++) {
-        // 	let row = result[i]
-        // 	data[row['word']] = {
-        // 		word: row['word'],
-        // 		phonetic: row['phonetic:'],
-        // 		meaning: row['meaning']
-        // 	}
-        // }
-        // console.log(data)
-        // res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});//设置response编码为utf-8
-        // res.send(JSON.stringify(result));
-        // res.writeHead(200,{'Content-Type':'application/json;charset=utf-8'});
         res.json(result)
     });
 });
+
+// http://localhost:3001/vocabulary/wordNum?owner=all&name=%E5%9B%9B%E7%BA%A7
+router.get('/wordNum', function(req, res, next) {
+  var  sql = 'SELECT count(*) AS count FROM vocabulary WHERE list = ? AND (owner = ? or owner = "all")';
+  var owner = req.query.owner
+  var name = req.query.name
+
+  connection.query(sql, [name,owner],function (err, result) {
+      if(err){
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      res.send(result[0])
+  });
+});
+
 
 module.exports = router;
