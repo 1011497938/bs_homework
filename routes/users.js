@@ -13,10 +13,6 @@ var connection = mysql.createConnection({
 //执行创建连接 
 connection.connect();
 
-// var  sql = 'SELECT * FROM vocabulary WHERE list = ? LIMIT ?';
-
-
-
 router.get('/', function(req, res, next) {
   var  sql = 'SELECT * FROM user WHERE name = ?';
   var name = req.query.name

@@ -213,6 +213,7 @@ class VocabularyBlock extends Component {
   }
 }
 
+@observer
 // 添加到单词本
 class AddTo  extends Component{
   constructor(props){
@@ -277,7 +278,7 @@ class AddTo  extends Component{
     }
     return(
       <Modal trigger={<Button color='grey' >add to</Button>}>
-        <Modal.Header>添加到单词本</Modal.Header>
+        <Modal.Header>添加到</Modal.Header>
         <Modal.Content image>
         <Form>
           <Form.Field label='选择单词本' control='select' id="vocabularyList">
@@ -285,11 +286,36 @@ class AddTo  extends Component{
               renderList()
             }
           </Form.Field>
-          <Button type='submit' onClick={submit}>登陆</Button>
+          <Button type='submit' onClick={submit}>添加</Button>
         </Form>
         </Modal.Content>
       </Modal>
     )
+  }
+}
+
+@observer
+class DelButton extends Component {
+  render(){
+    var del = ()=>{
+      fetch('/vocabulary/delete?word=' + this.props.word + '&vocabulary=' + this.props.name + '&owner='+myStateStore.loginStatus.name,{  
+          method: 'GET',  
+      })  
+      .then((res) => {  
+          if(res.ok){
+              res.text().then((data)=>{
+                  if (data==='success') {
+                    alert("删除成功")
+                    this.props.update()
+                  }
+              })
+          }
+      })  
+      .catch((error) => {  
+          console.log(error)  
+      }) 
+    }
+    return <Button onClick={del}>del</Button>
   }
 }
 
@@ -306,6 +332,26 @@ class WordTable extends Component {
     myStateStore.setSelectedV("")
   }
 
+  update(){
+    //找到生词本所有单词
+    var thisNode = this
+    fetch('/vocabulary?listName='+this.props.name,{  
+        method: 'GET',  
+    })  
+    // .then((response) => response.json())  
+    .then((res) => {  
+        if(res.ok){
+            res.text().then((data)=>{
+                var json = JSON.parse(data); 
+                thisNode.setState({words:json})
+                // myStateStore.setShowWordData(json)
+            })
+        }
+    })  
+    .catch((error) => {  
+        console.log(error)  
+    })  
+  }
 
   componentDidMount(){
       //找到生词本所有单词
@@ -319,7 +365,7 @@ class WordTable extends Component {
               res.text().then((data)=>{
                   var json = JSON.parse(data); 
                   thisNode.setState({words:json})
-                  myStateStore.setShowWordData(json)
+                  // myStateStore.setShowWordData(json)
               })
           }
       })  
@@ -330,17 +376,15 @@ class WordTable extends Component {
 
   render() {
     var renderTable = ()=>{
-      // console.log(this.state.words)
       var row = (word,index) => (
-        <Table.Row key={word.word+"_"+index}>
+        <Table.Row key={index}>
           <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
           <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
           <Table.Cell  textAlign='left'>
             <Button.Group>
-              <Button className={word.word + '_' + word.list + '_del'}>del</Button>
+              <DelButton word={word.word} name={this.props.name} update={this.update.bind(this)}/>
               <Button.Or />
               <AddTo word={word}/>
-              {/*<Button color='grey' className={word.word + '_' + word.list + '_add'}>addTo</Button>*/}
             </Button.Group>
           </Table.Cell>
         </Table.Row>
@@ -358,11 +402,14 @@ class WordTable extends Component {
       return table;
     }
 
+    var startMemorize = () => {
+      myStateStore.setShowWordData(this.state.words)
+    }
     return (
       <Segment padded>
         <Header size='huge'>{this.props.name}</Header>
         <Button.Group widths='2'>
-          <Button >开始背诵</Button>
+          <Button onClick={startMemorize}>开始背诵</Button>
           <Button color='grey' onClick={this.exit}>退出</Button>
         </Button.Group>
         <Divider />

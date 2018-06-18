@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import $ from 'jquery';
 
-import { Button, Divider, Segment, Container, Header, Form, Dropdown, Rating,  List , Progress, Select } from 'semantic-ui-react'
+import { Button, Divider, Segment, Container, Header, Form, Dropdown, Rating,  List , Progress, Select, Modal, Icon, Image, Item} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import './css/NavBlock.css'
 
@@ -216,11 +216,11 @@ class MyPlan extends Component {
 							<Header as='h5'>背诵记录：</Header>
 							{renderHistory()}
 						</List>
-							<Button.Group vertical fluid >
-						    <Button fluid onClick={startMemorize}>开始今天的计划</Button>
-						    <Button fluid onClick={startMemorize} >复习</Button>
-						    <Button fluid onClick={startMemorize}>考核</Button>
-					    </Button.Group>
+							<div>
+							    <Button fluid style={{margin:10}} onClick={startMemorize}>开始今天的计划</Button>
+							    <Test owner={myStateStore.loginStatus.name} vocabulary={plan.V}/>
+							    <Button style={{margin:10}} fluid onClick={startMemorize}>复习</Button>
+					    	</div>
 			      	</Segment>
   				):""
   		}
@@ -229,8 +229,6 @@ class MyPlan extends Component {
 		  	<Form>
 			    <Form.Group grouped>
 			    	<Select placeholder='选择生词本' options={options} fluid id="selectV"/>
-					{/*<Dropdown placeholder='选择单词本' fluid multiple selection options={options} />*/}
-					{/*<label>共4321个单词</label>*/}
 					<Form.Field label='几天背诵' control='select' id="num">
 						<option value='3'>3天</option>
 						<option value='10'>10天</option>
@@ -248,4 +246,120 @@ class MyPlan extends Component {
   }
 }
 
+class Question extends Component {
+	constructor(props){
+		super(props)
+		this.state = {
+			showAnswer : false
+		}
+	}
+	render(){
+		var show = ()=>{
+			this.setState({showAnswer:true})
+		}
+		return(
+		    <Item>
+		      <Item.Content>
+		        <Item.Header as='a'>{this.props.word}</Item.Header>
+		        <Item.Description>
+				  <div>
+				    <Button compact onClick={show}>{this.props.choice[0]}</Button>
+				    <Button compact onClick={show}>{this.props.choice[1]}</Button>
+				    <Button compact onClick={show}>{this.props.choice[2]}</Button>
+				    <Button compact onClick={show}>{this.props.choice[3]}</Button>
+				  </div>
+		        </Item.Description>
+		        <Item.Extra>答案：<div style={{color:"black"}}>{this.state.showAnswer?this.props.answer:""}</div></Item.Extra>
+		      </Item.Content>
+		    </Item>
+		)
+	}
+}
+
+// 复习
+@observer
+class Test extends  Component {  
+   constructor(props){
+    super(props)
+    this.state = {
+    	words : [],
+    	score : 0
+    }
+  }
+  componentDidMount(){
+	//找到生词本所有单词
+	var thisNode = this
+	fetch('/vocabulary?listName='+this.props.vocabulary,{  
+	  method: 'GET',  
+	})  
+	// .then((response) => response.json())  
+	.then((res) => {  
+	  if(res.ok){
+	      res.text().then((data)=>{
+	        var json = JSON.parse(data);
+			function shuffle(a) {
+			   var len = a.length;
+			   for(var i=0;i<len;i++){
+			       var end = len - 1 ;
+			       var index = (Math.random()*(end + 1)) >> 0;
+			       var t = a[end];
+			       a[end] = a[index];
+			       a[index] = t;
+			   }
+			   return a;
+			};
+			this.setState({words:shuffle(json)})
+			// console.log(this.state.words)
+	      })
+	  }
+	})  
+	.catch((error) => {  
+	  console.log(error)  
+	})  
+  }
+  render(){
+  	var renderQuestion = ()=>{
+  		var words = this.state.words
+  		var QuestionList = []
+  		var end = words.length - 1 ;
+  		for (var i = 0; i < words.length; i++) {
+  			
+  			var choice = []
+  			for (var j = 0; j < 3; j++) {
+  				var index = (Math.random()*(end + 1)) >> 0;
+  				choice.push(words[index].meaning)
+  			}
+  			choice.push(words[i].meaning);
+			function shuffle(a) {
+			   var len = a.length;
+			   for(var i=0;i<len;i++){
+			       var end = len - 1 ;
+			       var index = (Math.random()*(end + 1)) >> 0;
+			       var t = a[end];
+			       a[end] = a[index];
+			       a[index] = t;
+			   }
+			   return a;
+			};
+  			QuestionList.push(<Question key={i} word={words[i].word} answer={words[i].meaning} choice={shuffle(choice)} />)
+  		}
+  		return QuestionList
+  	}
+
+  	return (
+	  <Modal size="fullscreen" trigger={<Button fluid style={{margin:10}}>测试</Button>} fluid>
+	    <Modal.Header>测试单词本({this.props.vocabulary})</Modal.Header>
+	    <Modal.Content image scrolling>
+	      <Modal.Description>
+			  <Item.Group>
+			    {renderQuestion()}
+			  </Item.Group>
+	      </Modal.Description>
+	    </Modal.Content>
+	    <Modal.Actions>
+	    </Modal.Actions>
+	  </Modal>
+  	)
+  }
+}
 export default MyPlan;

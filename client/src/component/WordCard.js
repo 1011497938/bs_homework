@@ -13,9 +13,6 @@ class WordCard extends Component {
   state = {}
 
   componentDidMount() {
-    // fetch('/users')
-    //   .then(res => res.json())
-    //   .then(users => this.setState({ users }));
   }
 
   render() {
@@ -45,16 +42,16 @@ class WordCard extends Component {
         var slide_title = []
         var slide_status = []
         for (var i = 0; i < showWordData.length; i++) {
-          slide_title.push(<span data-slide-title={i} key={i+"-data-slide-title"}>{showWordData[i].word}<br/>{showWordData[i].meaning}</span>)
-          slide_status.push(<span data-slide-status={i} key={i+"-data-slide-status"}>{i}</span>)
+          slide_title.push(<span data-slide-title={i} key={i+"-data-slide-title"}>{showWordData[i].word}<br/></span>)
+          slide_status.push(<span data-slide-status={i} key={i+"-data-slide-status"}>{showWordData[i].meaning}</span>)
         }
         return (
           <div id="slider-content">
               <div className="meta">单词</div>
-              <h2 id="slide-title">{showWordData[0].word}<br/>{showWordData[0].meaning}</h2>
+              <h2 id="slide-title">{showWordData[0].word}<br/></h2>
               {slide_title}
               <div className="meta">意思</div>
-              <div id="slide-status">{i}</div>
+              <div id="slide-status">{showWordData[0].meaning}</div>
               {slide_status}
           </div>
         )

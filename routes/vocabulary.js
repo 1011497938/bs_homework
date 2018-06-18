@@ -57,4 +57,19 @@ router.get('/delete', function(req, res, next) {
   });
 });
 
+
+router.get('/addTo', function(req, res, next) {
+  var sql = 'INSERT INTO vocabulary(word, meaning, list, owner) VALUES (?,?,?,?)';
+  var owner = req.query.owner
+  var word = req.query.word
+  var vocabulary = req.query.vocabulary
+  var meaning = req.query.meaning
+  connection.query(sql, [word, meaning, vocabulary, owner],function (err, result) {
+      if(err){
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      res.send("success")
+  });
+});
 module.exports = router;
