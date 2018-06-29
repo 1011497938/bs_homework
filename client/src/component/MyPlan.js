@@ -193,7 +193,7 @@ class MyPlan extends Component {
 		return historyList
 	}
     return (
-      <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white"}}>
+      <div style={{"width":document.body.clientWidth>375?600:300, "height":"100%", "position":"absolute", "right":document.body.clientWidth>375?80:60,"backgroundColor":"white", "overflow":"scroll"}}>
   		{	
   			plan.V!=""?
   				(

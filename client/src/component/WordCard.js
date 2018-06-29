@@ -17,8 +17,6 @@ class WordCard extends Component {
 
   render() {
     var wordData = myStateStore.showWordData
-
-    console.log("WordCard")
     var renderCard_slider = () => {
       var showWordData = myStateStore.showWordData
       if (showWordData.length===0) {

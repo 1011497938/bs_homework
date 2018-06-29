@@ -1,1 +1,8 @@
 .nav-block i{ background: url()!important;position: relative!important; }
+
+
+@media screen and (max-width: 375px){
+	.nav-block{
+		width: 600px!important
+	}	
+}

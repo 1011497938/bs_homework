@@ -42,6 +42,11 @@ a.disabled, a.disabled:hover{ cursor:default; pointer-events:none;}
 	font-family: 'microsoft yahei',arial;
 	
 }	
+@media screen and (max-width: 375px){
+	.quick_links_panel{
+		width: 60px;	
+	}	
+}
 .quick_links_panel a{ 
 	display: block;
 	line-height: 200px;

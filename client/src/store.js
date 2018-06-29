@@ -47,7 +47,6 @@ class MyStateStore {
     this.plan.V = V
     this.plan.days = days
     this.plan.completion = completion
-    console.log(this.plan.V)
     if (this.loginStatus.name!=="") {
       // update
     }

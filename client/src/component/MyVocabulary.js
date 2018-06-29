@@ -21,8 +21,9 @@ class MyVocabulary extends Component {
 
   render() {
     var showing = () => myStateStore.selectedV.name===""?<VocabularyList />:<WordTable name={myStateStore.selectedV.name}/>
+    // console.log(document.body.clientWidth)
     return (
-      <div style={{"width":800, "height":"100%", "position":"absolute", "right":"80px","backgroundColor":"white", "overflow":"scroll"}}>
+      <div style={{"width":document.body.clientWidth>375?600:300, "height":"100%", "position":"absolute", "right":document.body.clientWidth>375?80:60,"backgroundColor":"white", "overflow":"scroll"}}>
         {showing()}
       </div>
     );
@@ -72,28 +73,40 @@ class VocabularyList extends Component {
     var renderVocabularyBlock = () => {
       var vocabularyList= this.state.vocabularyList
       var vocabularyBlockList = []
-      for (var i = 0; i < vocabularyList.length; i+=2) {
-        if (i+1<vocabularyList.length) {
-          vocabularyBlockList.push(
-            <Grid.Row key={i}>
-              <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
-              </Grid.Column>
-              <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i+1]} update={this.update.bind(this)}/>
-              </Grid.Column>
-            </Grid.Row>
-          )
-        }else{
-          vocabularyBlockList.push(
-            <Grid.Row key={i}>
-              <Grid.Column>
-                <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
-              </Grid.Column>
-            </Grid.Row>
-          )      
+      if (document.body.clientWidth>375)
+        for (var i = 0; i < vocabularyList.length; i+=2) {
+          if (i+1<vocabularyList.length) {
+            vocabularyBlockList.push(
+              <Grid.Row key={i}>
+                <Grid.Column>
+                  <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
+                </Grid.Column>
+                <Grid.Column>
+                  <VocabularyBlock name={vocabularyList[i+1]} update={this.update.bind(this)}/>
+                </Grid.Column>
+              </Grid.Row>
+            )
+          }else{
+            vocabularyBlockList.push(
+              <Grid.Row key={i}>
+                <Grid.Column>
+                  <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
+                </Grid.Column>
+              </Grid.Row>
+            )      
+          }
         }
-      }
+      else
+        for (var i = 0; i < vocabularyList.length; i++) {
+            vocabularyBlockList.push(
+              <Grid.Row key={i}>
+                <Grid.Column>
+                  <VocabularyBlock name={vocabularyList[i]} update={this.update.bind(this)}/>
+                </Grid.Column>
+              </Grid.Row>
+            )      
+        }
+
       return vocabularyBlockList;
     }
 
@@ -101,7 +114,7 @@ class VocabularyList extends Component {
       <Segment padded>
         <AddV update={this.update.bind(this)}/>
         <Divider horizontal>单词本</Divider>
-        <Grid columns={2} divided>
+        <Grid columns={document.body.clientWidth>375?2:1} divided>
           {renderVocabularyBlock()}
         </Grid>
       </Segment>
@@ -377,17 +390,22 @@ class WordTable extends Component {
   render() {
     var renderTable = ()=>{
       var row = (word,index) => (
-        <Table.Row key={index}>
-          <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
-          <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
-          <Table.Cell  textAlign='left'>
-            <Button.Group>
-              <DelButton word={word.word} name={this.props.name} update={this.update.bind(this)}/>
-              <Button.Or />
-              <AddTo word={word}/>
-            </Button.Group>
-          </Table.Cell>
-        </Table.Row>
+        document.body.clientWidth>375?
+          <Table.Row key={index}>
+            <Table.Cell  textAlign='center'>{word.word}</Table.Cell>
+            <Table.Cell  textAlign='left'>{word.meaning}</Table.Cell>
+            <Table.Cell  textAlign='left'>
+              <Button.Group>
+                <DelButton word={word.word} name={this.props.name} update={this.update.bind(this)}/>
+                <Button.Or />
+                <AddTo word={word}/>
+              </Button.Group>
+            </Table.Cell>
+          </Table.Row>
+        :
+          <Table.Row key={index}>
+            <Table.Cell  textAlign='center'>{word.word+ " " + word.meaning}</Table.Cell>
+          </Table.Row>     
       )
       var table = [];
       var length = 0;
@@ -412,18 +430,17 @@ class WordTable extends Component {
           <Button onClick={startMemorize}>开始背诵</Button>
           <Button color='grey' onClick={this.exit}>退出</Button>
         </Button.Group>
-        <Divider />
-
+        <Divider/>
         <Table celled padded>
+        {document.body.clientWidth>375?
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>单词</Table.HeaderCell>
-              {/*<Table.HeaderCell>发音</Table.HeaderCell>*/}
               <Table.HeaderCell>意思</Table.HeaderCell>
               <Table.HeaderCell>操作</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-
+        :<div/>}
           <Table.Body>
             {renderTable()}
           </Table.Body>
