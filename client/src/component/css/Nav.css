@@ -30,7 +30,7 @@ a.disabled, a.disabled:hover{ cursor:default; pointer-events:none;}
 /* quick_links */
 .quick_links_wrap,.mui-mbar-tabs{ height:100%; width:320px;right: 0; position:fixed;right:0;bottom:0; z-index:9; height:100%;-webkit-transition:width linear .4s; -moz-transition:width linear .4s; -ms-transition:width linear .4s; transition:width linear .4s; _position:fixed; _bottom:auto; _top:expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight-10);}
 .quick_links_wraper.quick_links_dockright{ margin-left:0; left:auto; right:4px;}
-.mui-mbar-tabs i,.ibar_closebtn,.login_order,.login_favorite{ display: inline-block; background: url("http://localhost:3001/images/ibar_sprites.png") no-repeat;cursor: pointer;height: 19px;width: 18px;vertical-align: top; position:absolute;}
+.mui-mbar-tabs i,.ibar_closebtn,.login_order,.login_favorite{ display: inline-block; background: url("http://192.168.1.100:3001/images/ibar_sprites.png") no-repeat;cursor: pointer;height: 19px;width: 18px;vertical-align: top; position:absolute;}
 .quick_links_panel{
 	width: 80px;
 	height: 100%;
@@ -137,7 +137,7 @@ a.disabled, a.disabled:hover{ cursor:default; pointer-events:none;}
 	width:80px;
 }
 .quick_links a.message_list{ 
-	/*background: url("http://localhost:3001/images//ibar_sprites.png") no-repeat;*/
+	/*background: url("http://192.168.1.100:3001/images//ibar_sprites.png") no-repeat;*/
 	line-height: 30px;
 	height: 170px;
 	background-position: -23px -225px;
@@ -180,8 +180,8 @@ a.disabled, a.disabled:hover{ cursor:default; pointer-events:none;}
 .quick_links a:hover i.qa,.quick_links .current i.qa{background-position: -33px -85px;}
 .quick_links .zuji{width: 18px;height: 34px;background-position: -4px -110px;top: 14px;left: 28px;background-size:80px 650px;}
 .quick_links a:hover i.zuji,.quick_links .current i.zuji{background-position: -36px -110px;}
-.quick_links .chongzhi{ background:url("http://localhost:3001/images/chongzhi.png") no-repeat;width: 35px;height: 35px;top: 2px;left: 3px;}
-.quick_links .wdsc{ background:url("http://localhost:3001/images/wdsc.png") no-repeat;width: 35px;height: 35px;top: 2px;left: 3px;background-size:80px 650px}
+.quick_links .chongzhi{ background:url("http://192.168.1.100:3001/images/chongzhi.png") no-repeat;width: 35px;height: 35px;top: 2px;left: 3px;}
+.quick_links .wdsc{ background:url("http://192.168.1.100:3001/images/wdsc.png") no-repeat;width: 35px;height: 35px;top: 2px;left: 3px;background-size:80px 650px}
 .quick_toggle .mpbtn_qrcode{    width: 43px;height: 43px;top: 11px;left: 12px;background-position: 9px -524px;background-size: 105px 762px;}
 .quick_toggle .top{ background-position:0 -201px;width: 17px;height: 14px;top: 12px;left: 12px;}
 .quick_toggle a:hover .top, .quick_links a.current .top{ background-position:-33px -201px;}
@@ -212,14 +212,14 @@ a.disabled, a.disabled:hover{ cursor:default; pointer-events:none;}
 .quick_leave_message .btn span{ background-position:100% -356px; font-size:12px; padding-right:20px; *height:29px;}
 .quick_leave_message .btn:hover span{ background-position:100% -386px;}
 .quick_links_pop .no_data{ color:#333; font-size:14px; padding:35px 10px; text-align:center;}
-.quick_links_pop .no_data i{ display:inline-block; background:url("http://localhost:3001/images/cart_new.png") no-repeat 0 -188px; margin:0 10px 0 0; height:36px; width:60px; vertical-align:middle;}
+.quick_links_pop .no_data i{ display:inline-block; background:url("http://192.168.1.100:3001/images/cart_new.png") no-repeat 0 -188px; margin:0 10px 0 0; height:36px; width:60px; vertical-align:middle;}
 .quick_links_pop .links li{ border-top:1px solid #f1f1f1; vertical-align:top;}
 .quick_links_pop .links a{ display:block; background:#FCFCFC; color:#333; font-size:14px; padding:12px 15px;}
 .quick_links_pop .links a:hover{ background-color:#F2F3F4; color:#4467a7;}
 .quick_links_pop .links .tips{ float:right; color:#61c2ed; font-size:12px;}
 .quick_my_qlinks .title i{ background-position:-200px 0; height:22px; width:22px;}
 .quick_message_list .title i{ background-position:-200px -34px; height:22px; width:22px;}
-.quick_message_list .no_data i{ background-image:url("http://localhost:3001/images/quick_links_no_msg.png"); background-position:0 0; height:45px; width:62px;}
+.quick_message_list .no_data i{ background-image:url("http://192.168.1.100:3001/images/quick_links_no_msg.png"); background-position:0 0; height:45px; width:62px;}
 
 /*修改*/
 .ibar_plugin_title{
@@ -353,7 +353,7 @@ font-size: 14px;
 .ia-head-list .money{ border-right:0;}
 .ga-expiredsoon{width: 244px;margin-left: 15px;margin-top: 20px;}
 .ga-expiredsoon .es-head {color: #5c5c5c;height: 13px;border-left: 3px solid #5c5c5c;padding-left: 13px;}
-.ia-none {background:url("http://localhost:3001/images/null_icon.png") no-repeat center 50px;text-align: center;padding-top: 150px;padding-bottom: 30px;font-family: "微软雅黑";font-size: 16px;color: #797979;}
+.ia-none {background:url("http://192.168.1.100:3001/images/null_icon.png") no-repeat center 50px;text-align: center;padding-top: 150px;padding-bottom: 30px;font-family: "微软雅黑";font-size: 16px;color: #797979;}
 .jiaru{ margin-top:40px;}
 .ibar-history-head{
 	position: relative;
@@ -447,7 +447,7 @@ font-size: 14px;
 i.ibar_recharge-contact {
 	width: 13px;
 	height: 14px;
-	background: url("http://localhost:3001/images/contact.png");
+	background: url("http://192.168.1.100:3001/images/contact.png");
 	top: 8px;
 	right: 5px;
 	cursor: pointer;
@@ -464,7 +464,7 @@ i.ibar_recharge-contact {
 i.ibar_recharge-arrow {
 	width: 6px;
 	height: 3px;
-	background: url("http://localhost:3001/images/arrow-down.png");
+	background: url("http://192.168.1.100:3001/images/arrow-down.png");
 	top: 14px;
 	right: 8px;
 	cursor: pointer;

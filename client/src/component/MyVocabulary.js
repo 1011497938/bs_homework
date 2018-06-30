@@ -203,7 +203,7 @@ class VocabularyBlock extends Component {
   render() {
     return (
       <Card>
-        <Image src='http://localhost:3001/images/matthew.png' />
+        <Image src='http://192.168.1.100:3001/images/matthew.png' />
         <Card.Content>
           <Card.Header>{this.props.name}</Card.Header>
           <Card.Meta>

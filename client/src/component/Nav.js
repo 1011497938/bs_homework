@@ -145,7 +145,7 @@ class Nav extends Component {
                           <i className="mpbtn_qrcode"></i>
                         </a>
                           <div className="mp_qrcode" style={{"display":"none"}}>
-                            <img src="http://localhost:3001/images/weixin_code_145.png" width="148" height="175" alt=""/>
+                            <img src="http://192.168.1.100:3001/images/weixin_code_145.png" width="148" height="175" alt=""/>
                             <i className="icon_arrow_white"></i>
                           </div>
                       </li>

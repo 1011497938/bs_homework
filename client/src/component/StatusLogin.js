@@ -45,7 +45,7 @@ class StatusLogin extends Component {
 		  		<a href="#none" className="my_qlinks"><i className="setting"></i></a>
 				<div className="ibar_login_box status_login" style={{"width":400}}>
 					<div className="avatar_box">
-					  <p className="avatar_imgbox"><img src="http://localhost:3001/images/no-img_mid_.jpg" alt=""/></p>
+					  <p className="avatar_imgbox"><img src="http://192.168.1.100:3001/images/no-img_mid_.jpg" alt=""/></p>
 					  <ul className="user_info">
 						  <li>用户名：</li>
 						  <li style={{"marginTop": "10px"}}>{isLogin?myStateStore.loginStatus.name:"未登录"}</li>

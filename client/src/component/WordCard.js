@@ -85,10 +85,10 @@ class WordCard extends Component {
           <div className="slider-inner">
             {renderCard_slider()}
           </div>
-            <img src="http://localhost:3001/images/a1.jpg" alt=""/>
-            <img src="http://localhost:3001/images/a2.jpg" alt=""/>
-            <img src="http://localhost:3001/images/a3.jpg" alt=""/>
-            <img src="http://localhost:3001/images/a4.jpg" alt=""/>     
+            <img src="" alt=""/>
+            <img src="" alt=""/>
+            <img src="" alt=""/>
+            <img src="" alt=""/>     
           {renderCard_pagination()}
       </div>
     );
