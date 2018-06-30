@@ -13,26 +13,26 @@ class StatusLogin extends Component {
 		}
 	}
 	componentDidMount(){
-		//找到用户所有的生词本  
-		var thisNode = this
-		fetch('/users?name=1&password=1',{  
-		  method: 'GET',  
-		})  
-		.then((res) => {  
-		  if(res.ok){
-			  res.text().then((data)=>{
-				  var data = JSON.parse(data);
-				  if (data.login=="success") {
-				  	data = JSON.parse(data.data) 
-				  	myStateStore.setLoginStatus(data.name, data.email)
-				  	myStateStore.setPlan(data.selectedVocabulary, data.days, data.completion)
-				  }
-			  })
-		  }
-		})  
-		.catch((error) => {  
-		  console.log(error)  
-		})  
+		// //找到用户所有的生词本  
+		// var thisNode = this
+		// fetch('/users?name=1&password=1',{  
+		//   method: 'GET',  
+		// })  
+		// .then((res) => {  
+		//   if(res.ok){
+		// 	  res.text().then((data)=>{
+		// 		  var data = JSON.parse(data);
+		// 		  if (data.login=="success") {
+		// 		  	data = JSON.parse(data.data) 
+		// 		  	myStateStore.setLoginStatus(data.name, data.email)
+		// 		  	myStateStore.setPlan(data.selectedVocabulary, data.days, data.completion)
+		// 		  }
+		// 	  })
+		//   }
+		// })  
+		// .catch((error) => {  
+		//   console.log(error)  
+		// })  
 	}
 	render() {
 		var exit = ()=>{
@@ -127,6 +127,23 @@ class SignUp extends Component{
 			let name = this.refs.user.value
 			let email = this.refs.email.value
 			// 还要写判断合法性的
+			var myReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+
+			if (name.length<=6) {
+				alert("姓名长度应大于6")
+				return
+			}
+
+			if (password.length<=6) {
+				alert("密码长度应大于6")
+				return
+			}
+
+		　　if(!myReg.test(email)){
+				alert("邮箱格式错误");
+				return;
+			}
+		　　　　	
 			fetch('/users/signUp?name='+name+'&email=' + email + '&password=' + password,{  
 			  method: 'GET',  
 			})  
